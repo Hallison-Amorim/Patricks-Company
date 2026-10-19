@@ -67,10 +67,12 @@ ser cadastradas à mão — só existe `.env.example` e `.env` local.
 ## Deploy (Vercel)
 
 - Projeto Vercel `patricks-company` apontando para este repositório.
-- Entry: `api/index.ts` + `vercel.json` (rewrites de `/` e `/api/*` para a
-  function), preset "Other" — sem build estático.
-- `engines.node` fixado em `22.x` (LTS) por compatibilidade com
-  `@vendia/serverless-express@4`.
+- `vercel.json` fixa `buildCommand: npm run build` e `outputDirectory: public`
+  (a landing estática da API em `public/` satisfaz o Output Directory e serve
+  a raiz do link; os rewrites mandam `/api` e `/api/*` para a function).
+- Entry da function: `api/index.ts` (Nest + serverless-express com event
+  source Vercel, instância cacheada fora do handler).
+- `engines.node` `>=22` (LTS) por compatibilidade com `@vendia/serverless-express@4`.
 - A aplicação Nest é criada uma única vez por container e cacheada fora
   do handler (ADR-001 §3).
 
