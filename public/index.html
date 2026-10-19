@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EMPREST.AI — API de empréstimo de equipamentos de TI." />
+    <title>EMPREST.AI — API</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <p class="kicker">EMPREST.AI · API</p>
+      <h1>API do EMPREST.AI</h1>
+      <p class="lead">
+        Serviço backend do sistema interno de empréstimo de equipamentos de TI.
+      </p>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="status">Online</p>
+      <ul class="endpoints">
+        <li>
+          <code>GET /api/health</code>
+          <span>health check do serviço</span>
+        </li>
+        <li>
+          <code>GET /api</code>
+          <span>informações do serviço (JSON)</span>
+        </li>
+        <li>
+          <code>GET /health</code>
+          <span>atalho do health check</span>
+        </li>
+      </ul>
+      <footer class="footer">
+        <span>Operações de TI</span>
+        <span>NestJS · Vercel</span>
+      </footer>
+    </main>
+  </body>
+</html>
