@@ -9,6 +9,7 @@ import { AppModule } from "./app.module";
  */
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
 
   const allowedOrigins = process.env.CORS_ORIGIN;
   app.enableCors({
