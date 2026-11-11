@@ -1,6 +1,4 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
   "rewrites": [
     { "source": "/", "destination": "/api/index" },
     { "source": "/api", "destination": "/api/index" },

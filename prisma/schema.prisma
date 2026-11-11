@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  employee
+  operations
+  @@map("user_role")
+}
+
+enum EquipmentStatus {
+  available
+  maintenance
+  loaned
+  @@map("equipment_status")
+}
+
+model Tenant {
+  id        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String      @unique
+  createdAt DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  profiles  Profile[]
+  equipment Equipment[]
+  loans     Loan[]
+  @@map("tenants")
+}
+
+model Profile {
+  id        String   @id @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  email     String   @unique
+  role      UserRole @default(employee)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  loans     Loan[]
+  @@map("profiles")
+}
+
+model Equipment {
+  id        String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String          @map("tenant_id") @db.Uuid
+  assetTag  String          @map("asset_tag")
+  name      String
+  category  String
+  status    EquipmentStatus @default(available)
+  createdAt DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  tenant    Tenant          @relation(fields: [tenantId], references: [id])
+  image     EquipmentImage?
+  loans     Loan[]
+  @@unique([tenantId, assetTag])
+  @@map("equipment")
+}
+
+model EquipmentImage {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  equipmentId    String    @unique @map("equipment_id") @db.Uuid
+  pixabayImageId BigInt    @unique @map("pixabay_image_id")
+  storagePath    String    @unique @map("storage_path")
+  pixabayUrl     String    @map("pixabay_url")
+  author         String
+  authorUrl      String    @map("author_url")
+  license        String
+  licenseUrl     String    @map("license_url")
+  sha256         String
+  width          Int
+  height         Int
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  equipment      Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  @@map("equipment_images")
+}
+
+model Loan {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  equipmentId String    @map("equipment_id") @db.Uuid
+  borrowerId  String    @map("borrower_id") @db.Uuid
+  loanedAt    DateTime  @default(now()) @map("loaned_at") @db.Timestamptz(6)
+  dueAt       DateTime  @map("due_at") @db.Date
+  returnedAt  DateTime? @map("returned_at") @db.Timestamptz(6)
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  borrower    Profile   @relation(fields: [borrowerId], references: [id])
+  @@map("loans")
+}
