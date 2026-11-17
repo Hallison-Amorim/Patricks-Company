@@ -8,6 +8,6 @@ import { SupabaseAuthService } from './supabase-auth.service';
 @Module({
   controllers: [AuthConfigController],
   providers: [AuthContextService, AuthContextInterceptor, SupabaseAuthGuard, SupabaseAuthService],
-  exports: [AuthContextInterceptor, AuthContextService, SupabaseAuthGuard],
+  exports: [AuthContextInterceptor, AuthContextService, SupabaseAuthGuard, SupabaseAuthService],
 })
 export class AuthModule {}
